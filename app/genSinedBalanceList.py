@@ -233,7 +233,7 @@ def main_export(args):
         d=json.load(fp)
     #JSON用のdictを生成
     src={
-        'version':d["version"],
+        'version':"SignedBalanceList/0.1;"+d["version"],
         'created_date':d["created_date"],
         'params':{
             'snapshotHeight':d["params"]["height"],
@@ -281,7 +281,7 @@ def main_export(args):
             fp.writerow([src["params"]["accounts"]["total"],src["params"]["accounts"]["active"],src["params"]["accounts"]["drop"]])
 
             fp.writerow(['transactions'])
-            fp.writerow(['account','balance(NUKO)','baance(wie)',"transaction"])
+            fp.writerow(['account','balance(NUKO)','balance(wie)',"transaction"])
             for i in src["transactions"]:
                 fp.writerow([i[0],i[1]/1000000000000000000,i[1],i[2]])
     elif args.format=="json":
