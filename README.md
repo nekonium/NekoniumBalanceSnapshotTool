@@ -1,0 +1,2 @@
+# NekoniumBalanceSnapshotTool
+Nekoniumチェーンから残高証明書を作るためのツールです。
