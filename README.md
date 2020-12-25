@@ -69,7 +69,7 @@ $python3 balanceSnapshot.py ./nekonium_accounts.sqlite3 100000 --format sqlite
 $python3 genSinedBalanceList.py init nekonium_accounts.sqlite3-2 10000 --message TEST --out ./signed.json
 ```
 `--message`は署名データに埋め込む任意文字列です。16文字まで指定できます。
-```
+
 
 生成された`./signed.json`の中身です。まだ誰も署名していないので、`proofAccounts`が空になっています。
 ```
