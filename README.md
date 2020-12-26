@@ -60,13 +60,13 @@ $python3 balanceSnapshot.py ./nekonium_accounts.sqlite3 100000 --format sqlite
 
 
 ## 残高リストの生成と署名
-`genSinedBalanceList.py`を使います。
+`genSignedBalanceList.py`を使います。
 このスクリプトは、データベースの残高スナップショットから残高リストのJsonを生成し、それを編集することができます。
 
 ブロック100000の残高リストは次のコマンドで生成できます。
 予め`balanceSnapshot.py`でデータベースにブロック100000の残高スナップショットを生成しておいてください。
 ```
-$python3 genSinedBalanceList.py init nekonium_accounts.sqlite3-2 10000 --message TEST --out ./signed.json
+$python3 genSignedBalanceList.py init nekonium_accounts.sqlite3-2 10000 --message TEST --out ./signed.json
 ```
 `--message`は署名データに埋め込む任意文字列です。16文字まで指定できます。
 
@@ -100,7 +100,7 @@ $python3 genSinedBalanceList.py init nekonium_accounts.sqlite3-2 10000 --message
 署名するアカウントは、接続先のgnekoniumのアカウントに登録されていなければなりません。
 
 ```
-$python3 genSinedBalanceList.py sign ./signed.json 0x4b647402e73185ae03b5591b43f5236eccfcff23 --password "PASSWORD"
+$python3 genSignedBalanceList.py sign ./signed.json 0x4b647402e73185ae03b5591b43f5236eccfcff23 --password "PASSWORD"
 ```
 
 
@@ -164,7 +164,7 @@ CSV,またはJSONで出力できます。
 
 以下のコマンドはCSVで出力します。
 ```
-$python3 genSinedBalanceList.py export --format csv ./sbl.json
+$python3 genSignedBalanceList.py export --format csv ./sbl.json
 ```
 
 生成されるCSVファイルの内容です。

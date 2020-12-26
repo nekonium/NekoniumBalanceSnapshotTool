@@ -297,9 +297,9 @@ def main():
         残高証明リストの生成、トランザクションのエクスポートができます。
 
 
-        genSinedBalanceList init nekonium_acounts.sqlite3 1000 --message MESSAGE
-        genSinedBalanceList sign --json sbl.json --account Account
-        genSinedBalanceList export ./sbl.json --format json --lowerLimit 1
+        genSignedBalanceList init nekonium_acounts.sqlite3 1000 --message MESSAGE
+        genSignedBalanceList sign --json sbl.json --account Account
+        genSignedBalanceList export ./sbl.json --format json --lowerLimit 1
 
         exportが生成するトランザクションは、それぞれのアカウントの残高メッセージ(52byte)にsignedHash(64byte)をすべて連結した値です。
     """
