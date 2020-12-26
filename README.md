@@ -134,16 +134,16 @@ $python3 genSinedBalanceList.py sign ./signed.json 0x4b647402e73185ae03b5591b43f
 
 ### データ構造
 
-* `params`
-** `proofAccounts` 署名したアカウントのHEX値の配列です。署名した順に追記します。
-** `height` このリストの残高を取得したブロック高です。
-** `message` 署名に用いるメッセージの値です。
+- `params`
+	- `proofAccounts` 署名したアカウントのHEX値の配列です。署名した順に追記します。
+	- `height` このリストの残高を取得したブロック高です。
+	- `message` 署名に用いるメッセージの値です。
 
-* `balances`
-** `[0]` 残高の所有アカウントです。
-** `[1]` wie単位の残高です。
-** `[2]` アカウント`[0]`(20byte)、ブロック高`height`(4byte)、残高`[1]`(12byte)、メッセージ`message`(16byte)を連結した52byteのhex値
-** `[3]` hex値にproofAccountsのそれぞれのアカウントで署名したハッシュ値(64byte)
+- `balances`
+	- `[0]` 残高の所有アカウントです。
+	- `[1]` wie単位の残高です。
+	- `[2]` アカウント`[0]`(20byte)、ブロック高`height`(4byte)、残高`[1]`(12byte)、メッセージ`message`(16byte)を連結した52byteのhex値
+	- `[3]` hex値にproofAccountsのそれぞれのアカウントで署名したハッシュ値(64byte)
 
 
 proofAccounts[p]の署名ハッシュは、balances[n][3][p]です。
