@@ -1,7 +1,11 @@
-"""署名付き残高Jsonの生成ツール
+"""署名付き残高の生成ツール
+
 init     残高データベースから署名なしリストを生成
 sign     証明アカウントで残高に署名を追加
 export   トランザクションリストを生成
+    トランザクションリストはこのツールチェインの最終出力データです。
+    これは、アカウントとそのメタデータ、残高生成トランザクションのリストです。
+
 """
 #%%
 from web3 import Web3
@@ -191,7 +195,31 @@ class BalanceCertifications:
                 raise Exception("{0} invalid signeture.".format(i.account))
         return BalanceCertifications(p,b)
 
-
+class SignedBalanceTransactionTable:
+    """
+    exportでsqlite3フォーマットを出力するときに使うテーブル
+    """
+    _db:NukoChanDb
+    def __init__(self,db:NukoChanDb,table_name="SignedBalanceTransactionTable"):
+        self._db=db
+        self.table_name=table_name
+        pass
+    def initTable(self):
+        self._db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS {0}
+            (id integer,account text,amount text,amount_nuko real,`transaction` text,
+            primary key(id),unique(account))
+            """.format(self.table_name)
+        )
+        return
+    def put(self,account:str,amount:int,transaction:str):
+        self._db.execute("INSERT INTO {0}(account,amount,amount_nuko,`transaction`) VALUES (?,?,?,?)".format(self.table_name)
+            ,[account,str(int(amount)),amount/1000000000000000000,transaction])
+        return
+    # def get(self,account:str,default=None):
+    #     v=self._db.selectOne("SELECT * FROM {0} WHERE account=?".format(self.table_name),[account])
+    #     return v[0] if v is not None else default
 #%%
 
 import argparse
@@ -288,6 +316,29 @@ def main_export(args):
         fname="./sbl.transaction.json" if args.out is None else args.out
         with open(fname,"w") as fp:
             json.dump(src,fp,indent=2)
+    elif args.format=="sqlite3":
+        fname="./sbl.transaction.sqlite3" if args.out is None else args.out
+        with NukoChanDb(fname,autocommit=False) as db:
+            try:
+                meta=MetadataTable(db)
+                meta.initTable()
+                txs=SignedBalanceTransactionTable(db)
+                meta.put("version",src["version"])
+                meta.put("created_date",str(src['created_date']))
+                meta.putInt("snapshotHeight",src["params"]["snapshotHeight"])
+                meta.put("proofAccounts",",".join(src["params"]["proofAccounts"]))
+                meta.putInt("lowerLimit",src["params"]["lowerLimit"])
+                meta.putInt("accounts_total",src["params"]["accounts"]["total"])
+                meta.putInt("accounts_active",src["params"]["accounts"]["active"])
+                meta.putInt("accounts_drop",src["params"]["accounts"]["drop"])
+                txs.initTable()
+                for i in src["transactions"]:
+                    txs.put(i[0],i[1],i[2])
+                db.commit()
+            except:
+                db.rollback()
+                print("Rollbacked!")
+                raise
     else:
         raise Exception("bad format")
 
@@ -324,7 +375,7 @@ def main():
 
     parser_init = subparsers.add_parser('export', help="Signe each balances")
     parser_init.add_argument('json', type=str,help='Source BalanceCertification format Json path')
-    parser_init.add_argument('--format', type=str, choices=["json","csv"],default="json",help="Output file format")
+    parser_init.add_argument('--format', type=str, choices=["json","csv","sqlite3"],default="json",help="Output file format")
     parser_init.add_argument('--lowerLimit', type=int, default=0,help="Lower limit in wie")
     parser_init.add_argument('--out', type=str,help="transaction file name",default=None)
     parser_init.set_defaults(func=main_export)
