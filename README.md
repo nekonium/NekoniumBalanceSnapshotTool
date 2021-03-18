@@ -189,3 +189,68 @@ account	balance(NUKO)	balance(wie)	transaction
 残高0を除外するには、`--lowerLimit 1`を指定します。
 accountsの下の行は、元データのアカウントの数、出力対象の数、除外された数です。
 
+# Web API
+
+sqlite3形式で生成したトランザクションデータのRESTful-APIを提供するPHPスクリプトです。
+
+データベースは以下のように生成します。
+```
+$python3 genSignedBalanceList.py export --format sqlite3 ./db.sqlite3
+```
+## 設置
+
+web.api以下とデータベースファイルをコピーして、_libs.phpの中のDBPATHにデータベースのパスを設定します。
+
+## API
+
+データベースに格納されているアカウントのレコード一覧を得る。
+
+/accountlist.php?limit=[int]&page=[int]&order=[account|id|acmount|amount_nuko]&notx&i
+
+limit 1ページ当たりの項目数
+page ページ番号
+order 並べ替えキー
+notx キーがある場合、txフィールドを省略する。
+i キーがある場合インデントで整形する。
+
+全てのパラメータは省略できます。
+
+```
+{
+    "version": "NukoPunchREST/0.1.0;AccountListApi/1.0.0;PHP",
+    "success": true,
+    "timestamp": 1616074839000,
+    "result": {
+        "pages": {
+            "total": 1907,
+            "page": 0
+        },
+        "total": "19066",
+        "list": [
+            [
+                6,
+                "0x0000000000000000000000000000000000000000",
+                "18000000000000000000",
+                18,
+                "0x000000000000000000000000000000000000000000559a1000000000f9ccd8a1c50800004b6f6e756b6f546f6b656e2f303030312db39e2f85f68a7e3306041d3f412897cd780a5a937ccc5b9246de31bba440d679a315b37bdc8ea95bbbf3d50599182c24cf556c161cd003b44fe6dabee60c1c1b"
+            ],
+            [
+                1660,
+                "0x0000578BD7ABc6aa99C15AA0FAB3921929f92cFa",
+                "276000000000000",
+                0.000276,
+                "0x0000578bd7abc6aa99c15aa0fab3921929f92cfa00559a10000000000000fb0541f540004b6f6e756b6f546f6b656e2f30303031aa12489c626302748f3948641fa5020b895543f7013dec0cb1f5be0a290509747ca9dc781bb6100cdd66b87bf98e6d4f533a049aca54c64adb2e57958d8f3deb1c"
+            ],
+:
+```
+
+アカウントの残高証明レコードを得る。
+
+/accountinfo.php?account=[イーサリウムアドレス]&notx&i
+
+
+account 取得するレコードのアカウント
+notx キーがある場合、txフィールドを省略する。
+i キーがある場合インデントで整形する。
+
+accountは省略できません。他のパラメータは省略できます。
