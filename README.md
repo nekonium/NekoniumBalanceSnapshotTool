@@ -203,6 +203,7 @@ web.api以下とデータベースファイルをコピーして、_libs.phpの�
 
 ## API
 
+### accountlist.php
 データベースに格納されているアカウントのレコード一覧を得る。
 
 /accountlist.php?limit=[int]&page=[int]&order=[account|id|acmount|amount_nuko]&notx&i
@@ -243,6 +244,7 @@ i キーがある場合インデントで整形する。
             ],
 :
 ```
+### accountinfo.php
 
 アカウントの残高証明レコードを得る。
 
