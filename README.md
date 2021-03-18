@@ -208,11 +208,11 @@ web.api以下とデータベースファイルをコピーして、_libs.phpの�
 
 /accountlist.php?limit=[int]&page=[int]&order=[account|id|acmount|amount_nuko]&notx&i
 
-limit 1ページ当たりの項目数
-page ページ番号
-order 並べ替えキー
-notx キーがある場合、txフィールドを省略する。
-i キーがある場合インデントで整形する。
+* limit 1ページ当たりの項目数
+* page ページ番号
+* order 並べ替えキー0
+* notx キーがある場合、txフィールドを省略する。
+* i キーがある場合インデントで整形する。
 
 全てのパラメータは省略できます。
 
@@ -251,8 +251,22 @@ i キーがある場合インデントで整形する。
 /accountinfo.php?account=[イーサリウムアドレス]&notx&i
 
 
-account 取得するレコードのアカウント
-notx キーがある場合、txフィールドを省略する。
-i キーがある場合インデントで整形する。
+* account 取得するレコードのアカウント
+* notx キーがある場合、txフィールドを省略する。
+* i キーがある場合インデントで整形する。
 
 accountは省略できません。他のパラメータは省略できます。
+```
+{
+    "version": "NukoPunchREST/0.1.0;AccountInfoApi/1.0.0;PHP",
+    "success": true,
+    "timestamp": 1616076444000,
+    "result": [
+        4218,
+        "0x00037e258b1Ef47D62A3d1B92698D88C32889E61",
+        "100376254174397031",
+        0.100376254174397,
+        "0x00037e258b1ef47d62a3d1b92698d88c32889e6100559a100000000001649babddf302674b6f6e756b6f546f6b656e2f30303031c483cadcd577c1675f2e860133aa3a3c15930bcb3935221eed0c3ee8655be29375f107d6b90cc337377f376cfc3a9c5985ae6fca6542d3f2b356fccb1ab1aa381b"
+    ]
+}
+```
